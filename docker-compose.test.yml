@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  betting-api:
+    build:
+      context: .
+      dockerfile: apps/betting-api/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - postgres
+    networks:
+      - flashscore-network
+
+  scraper:
+    build:
+      context: .
+      dockerfile: apps/scraper/Dockerfile
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - postgres
+    networks:
+      - flashscore-network
+
+  postgres-test:
+    container_name: postgres-test-db
+    image: postgres:13.2-alpine
+    ports:
+      - $POSTGRES_TEST_PORT:5432
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    networks:
+      - flashscore-network
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - $REDIS_PORT:6379
+    networks:
+      - flashscore-network
+
+networks:
+  flashscore-network:
+
+volumes:
+  pgdata:
