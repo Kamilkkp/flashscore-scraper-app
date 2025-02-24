@@ -10,14 +10,14 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2017",
     "module": "esnext",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@flashscore-scraper-api/libs": ["libs/src/index.ts"]
+      "@flashscore-scraper-api/libs/data-access": ["./dist/libs/data-access/index.js"]
     }
   },
   "exclude": ["node_modules", "tmp"]

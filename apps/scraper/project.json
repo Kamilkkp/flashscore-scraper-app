@@ -5,14 +5,16 @@
   "projectType": "application",
   "tags": [],
   "dependencies": {
-    "@flashscore-scraper-api/shared-database": "*"
+    "@flashscore-scraper-api/libs": "*"
   },
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["^build", "data-access"],
       "options": {
+        "progress": true,
         "platform": "node",
         "outputPath": "dist/apps/scraper",
         "format": ["cjs"],
@@ -46,7 +48,7 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "scraper:build",
-        "runBuildTargetDependencies": false
+        "runBuildTargetDependencies": true
       },
       "configurations": {
         "development": {

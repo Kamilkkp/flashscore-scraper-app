@@ -1,0 +1,72 @@
+{
+  "name": "data-access",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/data-access/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/data-access",
+        "main": "libs/data-access/index.ts",
+        "generatePackageJson": true,
+        "tsConfig": "libs/data-access/tsconfig.lib.json"
+      }
+    },
+    "migration:up": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ],
+      "options": {
+        "command": "npx typeorm migration:run -d ./src/data-source.js",
+        "cwd": "./dist/libs/data-access"
+      }
+    },
+    "migration:down": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ],
+      "options": {
+        "command": "npx typeorm migration:revert -d ./src/data-source.js",
+        "cwd": "./dist/libs/data-access"
+      }
+    },
+    "generate-exports": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node ./scripts/generate-exports.ts",
+        "cwd": "./libs/data-access"
+      }
+    },
+    "post-generate-entities": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./scripts/post-generate-entities.sh",
+        "cwd": "./libs/data-access"
+      }
+    },
+    "generate-entities": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "rm -rf ./src/entities",
+          "npx typeorm-model-generator -h $POSTGRES_HOST -d $POSTGRES_DB -p $POSTGRES_PORT -u $POSTGRES_USER -x $POSTGRES_PASSWORD -e postgres --suffix-file .entity --suffix-class Entity -o ./src/entities --noConfig",
+          "nx run data-access:post-generate-entities",
+          "nx run data-access:generate-exports"
+        ],
+        "cwd": "./libs/data-access",
+        "parallel": false
+      }
+    }
+  }
+}

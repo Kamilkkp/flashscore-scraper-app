@@ -5,7 +5,7 @@
   "projectType": "application",
   "tags": [],
   "dependencies": {
-    "@flashscore-scraper-api/shared-database": "*"
+    "@flashscore-scraper-api/data-access": "*"
   },
   "targets": {
     "build": {

@@ -4,4 +4,4 @@ This library was generated with [Nx](https://nx.dev).
 
 ## Building
 
-Run `nx build libs` to build the library.
+Run `nx build data-access` to build the library.

@@ -63,7 +63,6 @@ export class ScraperService {
           };
         })
       );
-
       return { matchId, league, hosts, visitors, odds, startTime };
     } finally {
       await page.close();
